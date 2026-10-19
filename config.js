@@ -5,7 +5,7 @@
    Usa SOLO la clave pública ("anon" o "publishable").
    NUNCA pegues la clave "service_role" o "secret".
    ============================================================ */
-window.SITE_CONFIG = {
-  supabaseUrl: '',   // ejemplo: 'https://abcdefghijk.supabase.co'
-  supabaseKey: ''    // ejemplo: 'eyJhbGciOi...' o 'sb_publishable_...'
+window.SITE_CONFIG = 
+  supabaseUrl: 'https://rficjzlzofmmqnnxzbxu.supabase.co',
+  supabaseKey:   'sb_publishable_aAxNbhKZ7z34z8DOHMl0UQ_EKDTYQzV'
 };
