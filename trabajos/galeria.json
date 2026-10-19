@@ -1,0 +1,77 @@
+{
+ "nota": "Cada trabajo es una entrada. Sube las fotos a esta carpeta (trabajos/) y agrega un bloque como los de abajo. 'antes' es opcional. Quita \"ejemplo\": true en las fotos reales. ancho y alto son los píxeles de la foto (sirven para reservar el espacio).",
+ "trabajos": [
+  {
+   "id": "sofa-3-puestos",
+   "titulo": "Sofá de tres puestos",
+   "categoria": "Sofás",
+   "descripcion": "Manchas de uso diario fuera y la tela como nueva.",
+   "fecha": "2026-09",
+   "antes": "trabajos/sofa-3-puestos-antes.svg",
+   "despues": "trabajos/sofa-3-puestos-despues.svg",
+   "ancho": 1200,
+   "alto": 900,
+   "ejemplo": true
+  },
+  {
+   "id": "sillon-lectura",
+   "titulo": "Sillón de lectura",
+   "categoria": "Sillones",
+   "descripcion": "Polvo, olores y marcas de uso retirados por completo.",
+   "fecha": "2026-09",
+   "antes": "trabajos/sillon-lectura-antes.svg",
+   "despues": "trabajos/sillon-lectura-despues.svg",
+   "ancho": 1000,
+   "alto": 1000,
+   "ejemplo": true
+  },
+  {
+   "id": "colchon-doble",
+   "titulo": "Colchón doble",
+   "categoria": "Colchones",
+   "descripcion": "Higienización profunda para un descanso más fresco.",
+   "fecha": "2026-08",
+   "antes": "trabajos/colchon-doble-antes.svg",
+   "despues": "trabajos/colchon-doble-despues.svg",
+   "ancho": 1200,
+   "alto": 800,
+   "ejemplo": true
+  },
+  {
+   "id": "sofa-tela-clara",
+   "titulo": "Sofá en tela clara",
+   "categoria": "Sofás",
+   "descripcion": "Manchas de comida en tela clara, recuperada sin dañar el material.",
+   "fecha": "2026-08",
+   "antes": "trabajos/sofa-tela-clara-antes.svg",
+   "despues": "trabajos/sofa-tela-clara-despues.svg",
+   "ancho": 1200,
+   "alto": 900,
+   "ejemplo": true
+  },
+  {
+   "id": "silla-comedor",
+   "titulo": "Silla de comedor",
+   "categoria": "Sillas",
+   "descripcion": "El tapizado del asiento recupera su color original.",
+   "fecha": "2026-07",
+   "antes": "trabajos/silla-comedor-antes.svg",
+   "despues": "trabajos/silla-comedor-despues.svg",
+   "ancho": 1000,
+   "alto": 1100,
+   "ejemplo": true
+  },
+  {
+   "id": "poltrona-gris",
+   "titulo": "Poltrona gris",
+   "categoria": "Sillones",
+   "descripcion": "Limpieza de tela con manchas de café.",
+   "fecha": "2026-07",
+   "antes": "trabajos/poltrona-gris-antes.svg",
+   "despues": "trabajos/poltrona-gris-despues.svg",
+   "ancho": 1000,
+   "alto": 1000,
+   "ejemplo": true
+  }
+ ]
+}

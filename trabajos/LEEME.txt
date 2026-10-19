@@ -1,0 +1,38 @@
+CÓMO AGREGAR TUS TRABAJOS A LA GALERÍA (manera manual)
+======================================================
+
+Si ya conectaste el panel (admin.html), NO necesitas esto: sube las fotos desde el panel.
+Esta manera manual sirve si no usas el panel. Cuando el panel tiene trabajos, la página
+usa los del panel y deja de mostrar estos.
+
+1. Sube tus fotos a esta carpeta (trabajos/).
+   - Usa nombres en minúsculas, sin espacios ni tildes. Ejemplo: sofa-juan-antes.jpg
+   - Formato recomendado: .jpg o .webp, de 1600 px de ancho como máximo
+     (más pesadas hacen la galería lenta).
+   - Lo ideal es subir dos fotos del mismo mueble, tomadas desde el mismo lugar:
+     una ANTES y una DESPUÉS. Así funciona el deslizador de comparación.
+
+2. Abre el archivo galeria.json y agrega un bloque como este dentro de "trabajos":
+
+   {
+    "id": "sofa-juan",
+    "titulo": "Sofá de tres puestos",
+    "categoria": "Sofás",
+    "descripcion": "Manchas de comida retiradas.",
+    "fecha": "2026-10",
+    "antes": "trabajos/sofa-juan-antes.jpg",
+    "despues": "trabajos/sofa-juan-despues.jpg",
+    "ancho": 1600,
+    "alto": 1200
+   }
+
+   - categoria: Sofás, Sillones, Sillas o Colchones (puedes crear otras).
+   - antes es opcional: si no hay foto de antes, se muestra solo la foto final.
+   - ancho y alto son los píxeles de la foto (sirven para reservar el espacio).
+   - No uses "ejemplo": true en tus fotos reales (esa marca es solo para las de muestra).
+   - Cuida las comas entre bloques y que el archivo siga siendo un JSON válido.
+
+3. Borra las fotos de ejemplo (los archivos .svg) y sus bloques en galeria.json
+   cuando ya tengas las tuyas.
+
+4. Sube los cambios a GitHub. En 1 o 2 minutos se actualiza la página.
