@@ -194,7 +194,9 @@ button { font: inherit; }
   .fab:hover { transform: scale(1.07); }
   .brand:hover .brand-mark { transform: rotate(-10deg); }
 }
-.brand-mark { transition: transform .35s var(--ease); }
+.brand-mark { flex: none; transition: transform .35s var(--ease); }
+.brand-logo { display: block; width: clamp(190px, 26vw, 290px); height: auto; min-width: 0; mix-blend-mode: multiply; }
+@media (max-width: 520px) { .brand-mark { width: 26px; height: 26px; } }
 
 /* ---------- BURBUJAS Y AGUA ---------- */
 @keyframes foam { 0% { background-position: 0 0; opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { background-position: 0 100%; opacity: 0; } }
@@ -620,7 +622,8 @@ html.gal-open { overflow: hidden; }
 <header class="bar">
   <div class="wrap bar-in">
     <a class="brand" href="#inicio" aria-label="Ir al inicio">
-      <img class="brand-logo" src="img/logo-ayro-clean.jpg" width="1000" height="219" alt="" style="height:26px;width:auto;max-width:100%;display:block;mix-blend-mode:multiply">
+      <svg class="brand-mark" width="34" height="34" viewBox="0 0 38 38" fill="none" aria-hidden="true"><path d="M19 3C19 3 7 16 7 24a12 12 0 0 0 24 0C31 16 19 3 19 3Z" fill="#0B7C7A"/><path d="M13 25a6 6 0 0 0 6 6" stroke="#3CD0C6" stroke-width="2.6" stroke-linecap="round"/></svg>
+      <img class="brand-logo" src="img/logo-ayro-clean.jpg" width="1200" height="149" alt="">
       <span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap">AYRO CLEAN</span>
     </a>
     <nav class="pills" id="pills" aria-label="Secciones de la página">
