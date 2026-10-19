@@ -17,7 +17,7 @@ returns boolean
 language sql
 stable
 as $$
-  select coalesce(lower(auth.jwt() ->> 'email') = lower('TU_CORREO@ejemplo.com'), false);  -- <<< CAMBIA ESTE CORREO
+  select coalesce(lower(auth.jwt() ->> 'email') = lower('abrillopezandresfelipe76@gmail.com'), false);  -- <<< CAMBIA ESTE CORREO
 $$;
 
 -- 2) Tabla de trabajos
