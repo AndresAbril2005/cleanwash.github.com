@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#F6F8F8">
+<title>Panel de administración</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root { --ink: #0C1F27; --ink-2: #41565F; --teal: #0B7C7A; --aqua: #3CD0C6; --bg: #F6F8F8; --line: #DCE6E6; --soft: #E9F0EF; --danger: #B3261E; --ease: cubic-bezier(.23, 1, .32, 1); --gutter: clamp(18px, 4vw, 32px); }
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
+body { margin: 0; min-height: 100dvh; background: var(--bg); color: var(--ink); font: 400 1.0625rem/1.55 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif; -webkit-font-smoothing: antialiased; }
+h1, h2, h3 { margin: 0; font-family: 'Bricolage Grotesque', 'Figtree', system-ui, sans-serif; font-weight: 700; letter-spacing: -0.03em; }
+p { margin: 0; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid var(--teal); outline-offset: 3px; border-radius: 10px; }
+[hidden] { display: none !important; }
+.wrap { width: 100%; max-width: 980px; margin: 0 auto; padding-left: max(var(--gutter), env(safe-area-inset-left, 0px)); padding-right: max(var(--gutter), env(safe-area-inset-right, 0px)); }
+
+/* barra */
+.top { position: sticky; top: 0; z-index: 10; padding-top: env(safe-area-inset-top, 0px); background: rgba(246, 248, 248, .82); -webkit-backdrop-filter: blur(16px) saturate(170%); backdrop-filter: blur(16px) saturate(170%); box-shadow: 0 .5px 0 rgba(12, 31, 39, .14); }
+.top-in { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 64px; }
+.brand { display: flex; align-items: center; gap: 10px; font-family: 'Bricolage Grotesque', 'Figtree', sans-serif; font-weight: 700; font-size: 18px; letter-spacing: -0.02em; min-width: 0; }
+.brand span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.top-act { display: flex; gap: 8px; }
+
+/* botones */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; padding: 0 24px; border: 0; border-radius: 999px; background: var(--ink); color: #fff; font-weight: 600; font-size: 16px; text-decoration: none; transition: background-color .2s ease, transform .15s ease-out, opacity .2s ease; -webkit-user-select: none; user-select: none; }
+.btn:active { transform: scale(.97); }
+.btn:disabled { opacity: .55; cursor: default; }
+.btn-ghost { background: var(--soft); color: var(--ink); }
+.btn-sm { min-height: 44px; padding: 0 18px; font-size: 15px; }
+.btn-lg { min-height: 56px; padding: 0 30px; font-size: 17px; }
+.btn-danger { background: #FBE9E7; color: var(--danger); }
+.ibtn { width: 44px; height: 44px; border: 0; border-radius: 50%; background: var(--soft); color: var(--ink); display: grid; place-items: center; transition: background-color .2s ease, transform .15s ease-out, opacity .2s ease; }
+.ibtn:active { transform: scale(.92); }
+.ibtn:disabled { opacity: .35; cursor: default; }
+.link { border: 0; background: none; padding: 8px 0; min-height: 44px; color: var(--teal); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover:not(:disabled) { background: var(--teal); }
+  .btn-ghost:hover:not(:disabled) { background: #DCE8E6; }
+  .btn-danger:hover:not(:disabled) { background: #F7D6D2; }
+  .ibtn:hover:not(:disabled) { background: #DCE8E6; }
+}
+
+/* pantallas */
+.card { background: #fff; border-radius: 28px; padding: clamp(24px, 5vw, 40px); box-shadow: 0 1px 2px rgba(12, 31, 39, .06), 0 28px 50px -34px rgba(12, 31, 39, .4); }
+.center { max-width: 460px; margin: clamp(32px, 9vh, 96px) auto 0; }
+.center h1 { font-size: clamp(30px, 6vw, 40px); line-height: 1.05; }
+.center .lead { margin-top: 10px; color: var(--ink-2); }
+.fld { display: block; margin-top: 18px; }
+.lab, .fld > span { display: block; margin-bottom: 6px; font-weight: 600; font-size: 15px; }
+.lab small, .fld > span small { font-weight: 400; color: var(--ink-2); }
+input[type="email"], input[type="password"], input[type="text"], input[type="month"], select, textarea { width: 100%; min-height: 52px; padding: 12px 16px; border: 1.5px solid #CFE0DE; border-radius: 16px; background: #fff; font-size: 16px; transition: border-color .2s ease, box-shadow .2s ease; }
+textarea { resize: vertical; min-height: 84px; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 4px rgba(11, 124, 122, .15); }
+.pw { position: relative; }
+.pw button { position: absolute; right: 6px; top: 4px; }
+.err { margin-top: 14px; padding: 12px 16px; border-radius: 14px; background: #FBE9E7; color: var(--danger); font-size: 15px; }
+.center .btn { width: 100%; margin-top: 22px; }
+.steps { margin: 18px 0 0; padding-left: 22px; color: var(--ink-2); }
+.steps li { margin-bottom: 8px; }
+code { padding: 2px 7px; border-radius: 8px; background: var(--soft); font-size: .9em; }
+
+/* panel */
+.head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; padding: clamp(28px, 6vw, 56px) 0 22px; flex-wrap: wrap; }
+.head h1 { font-size: clamp(34px, 6vw, 56px); line-height: 1; letter-spacing: -0.04em; }
+.head p { margin-top: 8px; color: var(--ink-2); }
+.tip { margin: 0 0 20px; padding: 14px 18px; border-radius: 18px; background: #E3F4F2; color: #0B4F4D; font-size: 15.5px; }
+.list { margin: 0; padding: 0 0 48px; list-style: none; display: grid; gap: 14px; }
+.item { display: grid; grid-template-columns: 112px minmax(0, 1fr) auto; align-items: center; gap: 8px 18px; padding: 12px; border-radius: 24px; background: #fff; box-shadow: 0 1px 2px rgba(12, 31, 39, .06), 0 16px 30px -24px rgba(12, 31, 39, .4); }
+.item.off { opacity: .72; }
+.th { width: 112px; aspect-ratio: 4 / 3; border-radius: 16px; object-fit: cover; background: #E4EEED; display: block; }
+.meta { min-width: 0; }
+.meta strong { display: block; font-family: 'Bricolage Grotesque', 'Figtree', sans-serif; font-size: 20px; line-height: 1.15; letter-spacing: -0.02em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.meta .sub { margin-top: 2px; color: var(--ink-2); font-size: 15px; }
+.badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.bdg { padding: 4px 10px; border-radius: 999px; background: var(--soft); font-size: 13px; font-weight: 600; color: var(--ink-2); }
+.bdg.warn { background: #FFF1CC; color: #7A5600; }
+.acts { display: flex; align-items: center; gap: 8px; }
+.empty { padding: 56px 8px 64px; text-align: center; color: var(--ink-2); }
+.empty h2 { color: var(--ink); font-size: 28px; margin-bottom: 8px; }
+.skel { height: 96px; border-radius: 24px; background: linear-gradient(100deg, #E4EEED 30%, #F1F7F6 50%, #E4EEED 70%); background-size: 220% 100%; animation: sk 1.5s linear infinite; }
+@keyframes sk { to { background-position: -220% 0; } }
+@media (max-width: 720px) {
+  .item { grid-template-columns: 92px minmax(0, 1fr); }
+  .th { width: 92px; }
+  .acts { grid-column: 1 / -1; justify-content: flex-end; flex-wrap: wrap; }
+  .head .btn { width: 100%; }
+}
+
+/* ventanas */
+dialog { border: 0; padding: 0; background: #fff; color: var(--ink); border-radius: 28px; width: min(680px, calc(100% - 32px)); max-height: calc(100dvh - 32px); box-shadow: 0 40px 90px -30px rgba(12, 31, 39, .65); overflow: hidden; }
+dialog[open] { display: flex; flex-direction: column; animation: dIn .4s var(--ease) both; }
+dialog::backdrop { background: rgba(8, 22, 29, .55); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+@keyframes dIn { from { opacity: 0; transform: translateY(18px) scale(.98); } to { opacity: 1; transform: none; } }
+dialog form { display: flex; flex-direction: column; min-height: 0; flex: 1; }
+.dh { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 20px 24px 8px; }
+.dh h2 { font-size: 26px; }
+.db { padding: 8px 24px 20px; overflow-y: auto; overscroll-behavior: contain; flex: 1; }
+.df { display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding: 14px 24px calc(14px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line); background: #fff; }
+.df #f-status { margin-right: auto; color: var(--ink-2); font-size: 15px; }
+.slots { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.slot { position: relative; display: grid; place-items: center; aspect-ratio: 4 / 3; border: 2px dashed #B9CFCC; border-radius: 20px; background: #F2F8F7; overflow: hidden; text-align: center; color: var(--ink-2); font-size: 14.5px; cursor: pointer; transition: border-color .2s ease, background-color .2s ease; }
+.slot.drag, .slot:hover { border-color: var(--teal); background: #E8F4F2; }
+.slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: none; }
+.slot.has img { display: block; }
+.slot.has { border-style: solid; border-color: transparent; }
+.slot .hint { padding: 10px; line-height: 1.3; }
+.slot.has .hint { position: absolute; left: 8px; bottom: 8px; padding: 5px 11px; border-radius: 999px; background: rgba(12, 31, 39, .72); color: #fff; font-size: 13px; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.chk { display: flex; align-items: center; gap: 12px; margin-top: 20px; min-height: 44px; font-weight: 500; }
+.chk input { width: 24px; height: 24px; accent-color: var(--teal); }
+@media (max-width: 640px) {
+  dialog { width: 100%; max-width: none; height: 100dvh; max-height: none; border-radius: 0; }
+  .row2 { grid-template-columns: 1fr; gap: 0; }
+  .slots .lab { min-height: 3.1em; }
+  .dh, .db, .df { padding-left: max(18px, env(safe-area-inset-left, 0px)); padding-right: max(18px, env(safe-area-inset-right, 0px)); }
+  .dh { padding-top: max(16px, env(safe-area-inset-top, 0px)); }
+}
+.confirm { padding: 28px 24px 20px; }
+.confirm h2 { font-size: 26px; }
+.confirm p { margin-top: 10px; color: var(--ink-2); }
+.confirm .df { margin: 22px -24px -20px; }
+#toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); z-index: 100; max-width: calc(100% - 32px); padding: 13px 20px; border-radius: 999px; background: var(--ink); color: #fff; font-weight: 600; font-size: 15px; opacity: 0; transform: translate(-50%, 16px); pointer-events: none; transition: opacity .3s ease, transform .4s var(--ease); }
+#toast.on { opacity: 1; transform: translate(-50%, 0); }
+@media (prefers-reduced-motion: reduce) { dialog[open], .skel { animation: none; } #toast { transition-duration: .01ms; } }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap top-in">
+    <div class="brand">
+      <svg width="30" height="30" viewBox="0 0 38 38" fill="none" aria-hidden="true"><path d="M19 3C19 3 7 16 7 24a12 12 0 0 0 24 0C31 16 19 3 19 3Z" fill="#0B7C7A"/><path d="M13 25a6 6 0 0 0 6 6" stroke="#3CD0C6" stroke-width="2.6" stroke-linecap="round"/></svg>
+      <span>Panel de administración</span>
+    </div>
+    <div class="top-act">
+      <a class="btn btn-ghost btn-sm" href="index.html">Ver el sitio</a>
+      <button type="button" class="btn btn-ghost btn-sm" id="btn-out" hidden>Salir</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- Falta conectar -->
+  <section id="v-setup" hidden>
+    <div class="card center">
+      <h1>Falta conectar el panel</h1>
+      <p class="lead">Para subir fotos desde aquí necesitas conectar tu proyecto de Supabase (gratis). Sigue los pasos del archivo <code>ADMIN-LEEME.txt</code>.</p>
+      <ol class="steps">
+        <li>Crea tu proyecto en supabase.com y ejecuta <code>supabase-setup.sql</code>.</li>
+        <li>Crea tu usuario administrador.</li>
+        <li>Pega la URL y la clave pública en <code>config.js</code> y súbelo a GitHub.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Inicio de sesión -->
+  <section id="v-login" hidden>
+    <form class="card center" id="form-login" novalidate>
+      <h1>Entrar</h1>
+      <p class="lead">Solo el administrador puede cambiar las fotos de la galería.</p>
+      <label class="fld"><span>Correo</span><input type="email" id="l-email" autocomplete="username" inputmode="email" autocapitalize="none" required></label>
+      <label class="fld"><span>Contraseña</span>
+        <span class="pw"><input type="password" id="l-pass" autocomplete="current-password" required><button type="button" class="link" id="l-show" aria-label="Mostrar u ocultar la contraseña">Mostrar</button></span>
+      </label>
+      <p class="err" id="l-err" role="alert" hidden></p>
+      <button type="submit" class="btn btn-lg" id="l-btn">Entrar</button>
+    </form>
+  </section>
+
+  <!-- Panel -->
+  <section id="v-app" hidden>
+    <div class="head">
+      <div>
+        <h1>Nuestro trabajo</h1>
+        <p id="count"></p>
+      </div>
+      <button type="button" class="btn btn-lg" id="btn-add">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        Añadir trabajo
+      </button>
+    </div>
+    <p class="tip">Consejo: toma la foto de <strong>antes</strong> y la de <strong>después</strong> desde el mismo lugar y con el mismo encuadre. Así el deslizador de comparación se ve perfecto.</p>
+    <p class="err" id="a-err" role="alert" hidden></p>
+    <ul class="list" id="list" aria-live="polite"></ul>
+    <div class="empty" id="empty" hidden>
+      <h2>Aún no hay trabajos</h2>
+      <p>Toca «Añadir trabajo» para subir el primero. Mientras no subas ninguno, la página muestra las fotos de ejemplo.</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- Formulario de añadir / editar -->
+<dialog id="d-form" aria-labelledby="f-title">
+  <form id="form" novalidate>
+    <header class="dh">
+      <h2 id="f-title">Añadir trabajo</h2>
+      <button type="button" class="ibtn" data-close aria-label="Cerrar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </header>
+    <div class="db">
+      <div class="slots">
+        <div>
+          <span class="lab">Foto de después <b>*</b></span>
+          <label class="slot" id="slot-d"><input type="file" id="f-despues" accept="image/*" hidden><img alt=""><span class="hint">Toca para elegir la foto</span></label>
+        </div>
+        <div>
+          <span class="lab">Foto de antes <small>(opcional)</small></span>
+          <label class="slot" id="slot-a"><input type="file" id="f-antes" accept="image/*" hidden><img alt=""><span class="hint">Toca para elegir la foto</span></label>
+          <button type="button" class="link" id="rm-antes" hidden>Quitar foto de antes</button>
+        </div>
+      </div>
+      <label class="fld"><span>Título</span><input type="text" id="f-titulo" maxlength="80" placeholder="Ej: Sofá de tres puestos" autocomplete="off"></label>
+      <div class="row2">
+        <label class="fld"><span>Tipo de mueble</span>
+          <select id="f-cat"><option>Sofás</option><option>Sillones</option><option>Sillas</option><option>Colchones</option><option value="__otro">Otro…</option></select>
+        </label>
+        <label class="fld"><span>Fecha</span><input type="month" id="f-fecha" placeholder="AAAA-MM"></label>
+      </div>
+      <label class="fld" id="fld-cat2" hidden><span>¿Qué tipo de mueble?</span><input type="text" id="f-cat2" maxlength="30" placeholder="Ej: Alfombras" autocomplete="off"></label>
+      <label class="fld"><span>Descripción <small>(opcional)</small></span><textarea id="f-desc" maxlength="200" rows="2" placeholder="Ej: Manchas de comida retiradas."></textarea></label>
+      <label class="chk"><input type="checkbox" id="f-visible" checked> Mostrar en la página</label>
+      <p class="err" id="f-err" role="alert" hidden></p>
+    </div>
+    <footer class="df">
+      <span id="f-status" role="status"></span>
+      <button type="button" class="btn btn-ghost" data-close>Cancelar</button>
+      <button type="submit" class="btn" id="f-save">Guardar</button>
+    </footer>
+  </form>
+</dialog>
+
+<!-- Confirmar eliminar -->
+<dialog id="d-del" aria-labelledby="del-t" style="width:min(460px,calc(100% - 32px))">
+  <div class="confirm">
+    <h2 id="del-t">¿Eliminar este trabajo?</h2>
+    <p id="del-p"></p>
+    <div class="df">
+      <span id="del-status" role="status" style="margin-right:auto;color:var(--ink-2);font-size:15px"></span>
+      <button type="button" class="btn btn-ghost" data-close>Cancelar</button>
+      <button type="button" class="btn btn-danger" id="del-ok">Eliminar</button>
+    </div>
+  </div>
+</dialog>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js"></script>
+<script>
+(function () {
+  'use strict';
+  var cfg = window.SITE_CONFIG || {};
+  var BUCKET = 'trabajos';
+  var MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+  var CATS = ['Sofás', 'Sillones', 'Sillas', 'Colchones'];
+  var $ = function (id) { return document.getElementById(id); };
+  var sb = null;
+  var S = { rows: [], editing: null, despues: null, antes: null, removeAntes: false, busy: false, delRow: null };
+  var UP = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>';
+  var DOWN = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+
+  /* ---------- utilidades ---------- */
+  function show(view) {
+    ['v-setup', 'v-login', 'v-app'].forEach(function (v) { $(v).hidden = v !== view; });
+    $('btn-out').hidden = view !== 'v-app';
+  }
+  var toastT = 0;
+  function toast(msg) { var t = $('toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(function () { t.classList.remove('on'); }, 2800); }
+  function el(tag, cls, text) { var n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; }
+  function uid() { return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : (Date.now().toString(36) + Math.random().toString(36).slice(2, 10)); }
+  function fmtDate(f) { var m = /^(\d{4})-(\d{2})/.exec(f || ''); return m ? MESES[+m[2] - 1] + ' de ' + m[1] : (f || ''); }
+  function nowMonth() { var d = new Date(); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2); }
+  function friendly(e) {
+    var m = String((e && (e.message || e.error_description || e)) || '').toLowerCase(), st = e && (e.status || e.statusCode);
+    if (m.indexOf('invalid login') > -1 || m.indexOf('invalid_credentials') > -1) return 'Correo o contraseña incorrectos.';
+    if (m.indexOf('email not confirmed') > -1) return 'Esa cuenta aún no está confirmada. En Supabase, al crear el usuario marca «Auto Confirm User».';
+    if (m.indexOf('row-level security') > -1 || m.indexOf('not authorized') > -1 || m.indexOf('permission') > -1 || st === 401 || st === 403 || String(st) === '42501')
+      return 'Esta cuenta no tiene permiso para cambiar la galería. Revisa que el correo del archivo supabase-setup.sql sea el mismo con el que entraste.';
+    if (m.indexOf('failed to fetch') > -1 || m.indexOf('networkerror') > -1 || m.indexOf('load failed') > -1)
+      return 'No hay conexión con el servidor. Revisa tu internet. Si el proyecto lleva más de una semana sin uso, entra a supabase.com y reactívalo.';
+    if (m.indexOf('does not exist') > -1 || m.indexOf('bucket not found') > -1 || m.indexOf('could not find the table') > -1 || st === 404)
+      return 'Falta terminar la configuración: ejecuta el archivo supabase-setup.sql en Supabase.';
+    if (m.indexOf('too large') > -1 || m.indexOf('payload') > -1) return 'La foto es demasiado pesada. Prueba con otra.';
+    return 'Algo salió mal: ' + ((e && e.message) || 'error desconocido') + '.';
+  }
+  function showErr(id, msg) { var n = $(id); if (!msg) { n.hidden = true; return; } n.textContent = msg; n.hidden = false; }
+
+  /* ---------- sesión ---------- */
+  function route(session) {
+    if (session) { show('v-app'); loadList(); } else { show('v-login'); }
+  }
+  function init() {
+    if (!cfg.supabaseUrl || !cfg.supabaseKey || !window.supabase) { show('v-setup'); return; }
+    sb = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseKey, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false } });
+    var first = true;
+    sb.auth.onAuthStateChange(function (evt, session) {
+      setTimeout(function () {
+        if (evt === 'INITIAL_SESSION') { first = false; route(session); }
+        else if (evt === 'SIGNED_IN' && !first) { /* el inicio de sesión lo maneja el formulario */ }
+        else if (evt === 'SIGNED_OUT') { route(null); }
+      }, 0);
+    });
+  }
+  $('l-show').addEventListener('click', function () {
+    var p = $('l-pass'), on = p.type === 'password'; p.type = on ? 'text' : 'password'; this.textContent = on ? 'Ocultar' : 'Mostrar';
+  });
+  $('form-login').addEventListener('submit', function (e) {
+    e.preventDefault(); if (!sb) return;
+    var email = $('l-email').value.trim(), pass = $('l-pass').value;
+    showErr('l-err', '');
+    if (!email || !pass) { showErr('l-err', 'Escribe tu correo y tu contraseña.'); return; }
+    var btn = $('l-btn'); btn.disabled = true; btn.textContent = 'Entrando…';
+    sb.auth.signInWithPassword({ email: email, password: pass }).then(function (r) {
+      if (r.error) throw r.error;
+      $('l-pass').value = ''; route(r.data.session);
+    }).catch(function (err) { showErr('l-err', friendly(err)); })
+      .then(function () { btn.disabled = false; btn.textContent = 'Entrar'; });
+  });
+  $('btn-out').addEventListener('click', function () { if (sb) sb.auth.signOut(); });
+
+  /* ---------- lista ---------- */
+  function loadList() {
+    showErr('a-err', '');
+    var list = $('list'); list.textContent = '';
+    for (var i = 0; i < 3; i++) list.appendChild(el('li', 'skel'));
+    $('empty').hidden = true;
+    sb.from('trabajos').select('*').order('orden', { ascending: true }).order('creado', { ascending: false }).then(function (r) {
+      if (r.error) throw r.error;
+      S.rows = r.data || []; renderList();
+    }).catch(function (err) { list.textContent = ''; showErr('a-err', friendly(err)); });
+  }
+  function renderList() {
+    var list = $('list'); list.textContent = '';
+    var hidden = S.rows.filter(function (r) { return !r.visible; }).length;
+    $('count').textContent = S.rows.length === 0 ? '' : (S.rows.length + (S.rows.length === 1 ? ' trabajo' : ' trabajos') + (hidden ? ' (' + hidden + ' oculto' + (hidden > 1 ? 's' : '') + ')' : ''));
+    $('empty').hidden = S.rows.length > 0;
+    S.rows.forEach(function (r, i) {
+      var li = el('li', 'item' + (r.visible ? '' : ' off'));
+      var im = el('img', 'th'); im.src = r.despues_url; im.alt = ''; im.loading = 'lazy'; li.appendChild(im);
+      var meta = el('div', 'meta'); meta.appendChild(el('strong', null, r.titulo));
+      meta.appendChild(el('p', 'sub', [r.categoria, fmtDate(r.fecha)].filter(Boolean).join(', ')));
+      var bd = el('div', 'badges');
+      if (r.antes_url) bd.appendChild(el('span', 'bdg', 'Antes y después'));
+      if (!r.visible) bd.appendChild(el('span', 'bdg warn', 'Oculto'));
+      meta.appendChild(bd); li.appendChild(meta);
+      var acts = el('div', 'acts');
+      var up = el('button', 'ibtn'); up.type = 'button'; up.innerHTML = UP; up.setAttribute('aria-label', 'Subir una posición'); up.disabled = i === 0; up.addEventListener('click', function () { move(i, -1); });
+      var dn = el('button', 'ibtn'); dn.type = 'button'; dn.innerHTML = DOWN; dn.setAttribute('aria-label', 'Bajar una posición'); dn.disabled = i === S.rows.length - 1; dn.addEventListener('click', function () { move(i, 1); });
+      var vis = el('button', 'btn btn-ghost btn-sm', r.visible ? 'Ocultar' : 'Mostrar'); vis.type = 'button'; vis.addEventListener('click', function () { toggleVisible(r); });
+      var ed = el('button', 'btn btn-ghost btn-sm', 'Editar'); ed.type = 'button'; ed.addEventListener('click', function () { openForm(r); });
+      var de = el('button', 'btn btn-danger btn-sm', 'Eliminar'); de.type = 'button'; de.addEventListener('click', function () { openDelete(r); });
+      [up, dn, vis, ed, de].forEach(function (b) { acts.appendChild(b); });
+      li.appendChild(acts); list.appendChild(li);
+    });
+  }
+  function move(i, dir) {
+    var a = S.rows[i], b = S.rows[i + dir]; if (!a || !b) return;
+    var oa = a.orden, ob = b.orden;
+    if (oa === ob) ob = oa + (dir < 0 ? 1 : -1);
+    Promise.all([
+      sb.from('trabajos').update({ orden: ob }).eq('id', a.id),
+      sb.from('trabajos').update({ orden: oa }).eq('id', b.id)
+    ]).then(function (rs) {
+      var bad = rs.filter(function (x) { return x.error; })[0]; if (bad) throw bad.error;
+      loadList();
+    }).catch(function (err) { showErr('a-err', friendly(err)); loadList(); });
+  }
+  function toggleVisible(r) {
+    sb.from('trabajos').update({ visible: !r.visible }).eq('id', r.id).then(function (x) {
+      if (x.error) throw x.error;
+      toast(r.visible ? 'Trabajo oculto de la página' : 'Trabajo visible en la página'); loadList();
+    }).catch(function (err) { showErr('a-err', friendly(err)); });
+  }
+
+  /* ---------- fotos ---------- */
+  function loadImg(file) {
+    return new Promise(function (res, rej) {
+      var u = URL.createObjectURL(file), im = new Image();
+      im.onload = function () { URL.revokeObjectURL(u); res(im); };
+      im.onerror = function () { URL.revokeObjectURL(u); rej(new Error('No se pudo leer la foto.')); };
+      im.src = u;
+    });
+  }
+  function processImage(file) {
+    var MAX = 1600;
+    return Promise.resolve().then(function () {
+      if (window.createImageBitmap) { return createImageBitmap(file, { imageOrientation: 'from-image' }).catch(function () { return loadImg(file); }); }
+      return loadImg(file);
+    }).then(function (src) {
+      var w = src.width, h = src.height, k = Math.min(1, MAX / Math.max(w, h));
+      var cw = Math.max(1, Math.round(w * k)), ch = Math.max(1, Math.round(h * k));
+      var c = document.createElement('canvas'); c.width = cw; c.height = ch;
+      var g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, cw, ch); g.drawImage(src, 0, 0, cw, ch);
+      return new Promise(function (res, rej) {
+        c.toBlob(function (b) { b ? res({ blob: b, w: cw, h: ch, url: URL.createObjectURL(b) }) : rej(new Error('No se pudo preparar la foto.')); }, 'image/jpeg', 0.86);
+      });
+    });
+  }
+  function setSlot(which, info, remoteUrl) {
+    var slot = $(which === 'd' ? 'slot-d' : 'slot-a'), im = slot.querySelector('img'), hint = slot.querySelector('.hint');
+    var url = info ? info.url : remoteUrl;
+    if (url) { im.src = url; slot.classList.add('has'); hint.textContent = 'Cambiar foto'; }
+    else { im.removeAttribute('src'); slot.classList.remove('has'); hint.textContent = 'Toca para elegir la foto'; }
+    if (which === 'a') $('rm-antes').hidden = !url;
+  }
+  function pick(which, file) {
+    if (!file || !/^image\//.test(file.type || 'image/')) { showErr('f-err', 'Elige un archivo de imagen.'); return; }
+    showErr('f-err', ''); $('f-status').textContent = 'Preparando foto…';
+    processImage(file).then(function (info) {
+      if (which === 'd') { if (S.despues) URL.revokeObjectURL(S.despues.url); S.despues = info; }
+      else { if (S.antes) URL.revokeObjectURL(S.antes.url); S.antes = info; S.removeAntes = false; }
+      setSlot(which, info); $('f-status').textContent = '';
+    }).catch(function (err) { $('f-status').textContent = ''; showErr('f-err', friendly(err)); });
+  }
+  [['d', 'f-despues', 'slot-d'], ['a', 'f-antes', 'slot-a']].forEach(function (c) {
+    var input = $(c[1]), slot = $(c[2]);
+    input.addEventListener('change', function () { pick(c[0], input.files && input.files[0]); input.value = ''; });
+    slot.addEventListener('dragover', function (e) { e.preventDefault(); slot.classList.add('drag'); });
+    slot.addEventListener('dragleave', function () { slot.classList.remove('drag'); });
+    slot.addEventListener('drop', function (e) { e.preventDefault(); slot.classList.remove('drag'); pick(c[0], e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]); });
+  });
+  $('rm-antes').addEventListener('click', function () {
+    if (S.antes) URL.revokeObjectURL(S.antes.url);
+    S.antes = null; S.removeAntes = true; setSlot('a', null, null);
+  });
+
+  /* ---------- formulario ---------- */
+  var dForm = $('d-form');
+  function setBusy(on, msg) {
+    S.busy = on; $('f-save').disabled = on; $('f-status').textContent = msg || '';
+    Array.prototype.forEach.call(dForm.querySelectorAll('input, select, textarea, [data-close]'), function (n) { n.disabled = on; });
+  }
+  function openForm(row) {
+    S.editing = row || null; S.despues = null; S.antes = null; S.removeAntes = false;
+    $('f-title').textContent = row ? 'Editar trabajo' : 'Añadir trabajo';
+    $('f-titulo').value = row ? row.titulo : '';
+    var cat = row ? row.categoria : 'Sofás';
+    if (CATS.indexOf(cat) > -1) { $('f-cat').value = cat; $('fld-cat2').hidden = true; $('f-cat2').value = ''; }
+    else { $('f-cat').value = '__otro'; $('fld-cat2').hidden = false; $('f-cat2').value = cat; }
+    $('f-fecha').value = row ? (row.fecha || nowMonth()) : nowMonth();
+    $('f-desc').value = row ? (row.descripcion || '') : '';
+    $('f-visible').checked = row ? !!row.visible : true;
+    setSlot('d', null, row ? row.despues_url : null); setSlot('a', null, row ? row.antes_url : null);
+    showErr('f-err', ''); setBusy(false, '');
+    dForm.showModal();
+  }
+  $('f-cat').addEventListener('change', function () { var o = this.value === '__otro'; $('fld-cat2').hidden = !o; if (o) $('f-cat2').focus(); });
+  $('btn-add').addEventListener('click', function () { openForm(null); });
+  dForm.addEventListener('cancel', function (e) { if (S.busy) e.preventDefault(); });
+  dForm.addEventListener('click', function (e) { if (!S.busy && e.target.closest('[data-close]')) dForm.close(); });
+
+  function upload(blob, tag) {
+    var path = uid() + '-' + tag + '.jpg';
+    return sb.storage.from(BUCKET).upload(path, blob, { contentType: 'image/jpeg', cacheControl: '31536000', upsert: false }).then(function (r) {
+      if (r.error) throw r.error;
+      return { path: path, url: sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl };
+    });
+  }
+  $('form').addEventListener('submit', function (e) {
+    e.preventDefault(); if (S.busy) return;
+    var titulo = $('f-titulo').value.trim();
+    var cat = $('f-cat').value === '__otro' ? $('f-cat2').value.trim() : $('f-cat').value;
+    var fecha = $('f-fecha').value.trim();
+    if (!titulo) { showErr('f-err', 'Escribe un título para el trabajo.'); $('f-titulo').focus(); return; }
+    if (!cat) { showErr('f-err', 'Escribe qué tipo de mueble es.'); $('f-cat2').focus(); return; }
+    if (!S.editing && !S.despues) { showErr('f-err', 'Falta la foto de después. Es la foto principal del trabajo.'); return; }
+    if (fecha && !/^\d{4}-\d{2}$/.test(fecha)) { showErr('f-err', 'Escribe la fecha como AAAA-MM, por ejemplo 2026-10.'); return; }
+    showErr('f-err', '');
+    var patch = { titulo: titulo, categoria: cat, descripcion: $('f-desc').value.trim(), fecha: fecha || nowMonth(), visible: $('f-visible').checked };
+    var uploaded = [], oldPaths = [], ed = S.editing;
+    setBusy(true, 'Subiendo fotos…');
+    var chain = Promise.resolve();
+    if (S.despues) chain = chain.then(function () { return upload(S.despues.blob, 'despues'); }).then(function (u) {
+      uploaded.push(u.path); patch.despues_url = u.url; patch.despues_path = u.path; patch.ancho = S.despues.w; patch.alto = S.despues.h;
+      if (ed && ed.despues_path) oldPaths.push(ed.despues_path);
+    });
+    if (S.antes) chain = chain.then(function () { return upload(S.antes.blob, 'antes'); }).then(function (u) {
+      uploaded.push(u.path); patch.antes_url = u.url; patch.antes_path = u.path;
+      if (ed && ed.antes_path) oldPaths.push(ed.antes_path);
+    });
+    else if (S.removeAntes && ed) { patch.antes_url = null; patch.antes_path = null; if (ed.antes_path) oldPaths.push(ed.antes_path); }
+    chain.then(function () {
+      $('f-status').textContent = 'Guardando…';
+      return ed ? sb.from('trabajos').update(patch).eq('id', ed.id) : sb.from('trabajos').insert(patch);
+    }).then(function (r) {
+      if (r.error) throw r.error;
+      if (oldPaths.length) sb.storage.from(BUCKET).remove(oldPaths);
+      setBusy(false, ''); dForm.close(); toast(ed ? 'Cambios guardados' : 'Trabajo añadido'); loadList();
+    }).catch(function (err) {
+      if (uploaded.length) sb.storage.from(BUCKET).remove(uploaded);
+      setBusy(false, ''); showErr('f-err', friendly(err));
+    });
+  });
+
+  /* ---------- eliminar ---------- */
+  var dDel = $('d-del');
+  function openDelete(r) {
+    S.delRow = r; $('del-p').textContent = '«' + r.titulo + '» se quitará de la galería y sus fotos se borrarán. Esta acción no se puede deshacer.';
+    $('del-status').textContent = ''; $('del-ok').disabled = false; dDel.showModal();
+  }
+  dDel.addEventListener('click', function (e) { if (e.target.closest('[data-close]')) dDel.close(); });
+  $('del-ok').addEventListener('click', function () {
+    var r = S.delRow; if (!r) return;
+    $('del-ok').disabled = true; $('del-status').textContent = 'Eliminando…';
+    sb.from('trabajos').delete().eq('id', r.id).then(function (x) {
+      if (x.error) throw x.error;
+      var paths = [r.despues_path, r.antes_path].filter(Boolean);
+      if (paths.length) sb.storage.from(BUCKET).remove(paths);
+      dDel.close(); toast('Trabajo eliminado'); loadList();
+    }).catch(function (err) { $('del-status').textContent = ''; $('del-ok').disabled = false; dDel.close(); showErr('a-err', friendly(err)); });
+  });
+
+  init();
+})();
+</script>
+</body>
+</html>
