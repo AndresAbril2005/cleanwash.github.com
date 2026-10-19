@@ -371,7 +371,7 @@ html.loading { overflow: hidden; }
 .tz-skel { position: absolute; inset: 0; background: linear-gradient(100deg, #E4EEED 30%, #F1F7F6 50%, #E4EEED 70%); background-size: 220% 100%; animation: tzsk 1.6s linear infinite; }
 @keyframes tzsk { to { background-position: -220% 0; } }
 .tz-frame.ready .tz-skel { display: none; }
-.tz-frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.tz-frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block; }
 .tz-before { clip-path: inset(0 calc(100% - var(--wp)) 0 0); }
 .tz-line { position: absolute; top: 0; bottom: 0; left: var(--wp); width: 3px; margin-left: -1.5px; background: #fff; box-shadow: 0 0 0 1px rgba(12, 31, 39, .14); pointer-events: none; }
 .tz-knob { position: absolute; top: 50%; left: var(--wp); width: 46px; height: 46px; margin: -23px 0 0 -23px; border-radius: 50%; background: #fff; color: var(--ink); display: grid; place-items: center; box-shadow: 0 8px 22px rgba(12, 31, 39, .3); pointer-events: none; }
